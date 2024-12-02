@@ -45,8 +45,28 @@ function updateTask(id, status) {
   };
 }
 
-function deleteTask(params) {
-  return params;
+function deleteTask(id) {
+  const taskId = Number(id);
+  if (!taskId) {
+    return {
+      status: 400,
+      error: "Invalid task ID.",
+    };
+  }
+  const taskData = taskStorage.readTaskData();
+  const taskIndex = taskData.list.findIndex((item) => item.id === taskId);
+  if (taskIndex === -1) {
+    return {
+      status: 404,
+      error: "Task not found.",
+    };
+  }
+  taskData.list.splice(taskIndex, 1);
+  taskStorage.writeTaskData(taskData);
+  return {
+    status: 200,
+    message: "Task deleted successfully",
+  };
 }
 
 module.exports = {

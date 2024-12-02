@@ -19,8 +19,8 @@ function updateTask(req, res) {
 
 function deleteTask(req, res) {
   const { id } = req.params;
-  const result = tasksService.deleteTask(id);
-  res.json(result);
+  const { status, ...result } = tasksService.deleteTask(id);
+  res.status(status).json(result);
 }
 
 function getFilteredTasks(req, res) {
