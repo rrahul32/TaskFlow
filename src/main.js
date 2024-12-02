@@ -19,6 +19,14 @@ router.route("/tasks/status/:status").get(tasksController.getFilteredTasks);
  * Task routes end
  */
 
+// Handle undefined routes
+router.use((req, res) => {
+  res.status(404).json({
+    error: "Route not found.",
+    path: req.originalUrl,
+  });
+});
+
 app.use(router);
 
 app.listen(port, () => {

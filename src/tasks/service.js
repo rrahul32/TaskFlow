@@ -1,6 +1,11 @@
 const taskStorage = require("../storage");
 const { Task, taskStatus } = require("../utils");
 
+/**
+ * Check whether the status is a valid task status.
+ * @param {string} status - The status to be validated.
+ * @returns {string | null} Error message if there is a validation error or null otherwise.
+ */
 function validateTaskStatus(status) {
   if (status === taskStatus.completed || status === taskStatus.pending) {
     return null;
@@ -8,6 +13,11 @@ function validateTaskStatus(status) {
   return "Invalid task status";
 }
 
+/**
+ * Validates all the task fields except ID.
+ * @param {Task} task - The task to be validated.
+ * @returns {string | null} Error message if there is a validation error or null otherwise.
+ */
 function validateTaskDetails(task) {
   if (!task.title) {
     return "Task title should not be empty";
@@ -24,6 +34,10 @@ function validateTaskDetails(task) {
   return validateTaskStatus(task.status);
 }
 
+/**
+ * Creates a new task.
+ * @param {{title:string; description:string}} params - The params to create task containing the task title and description.
+ */
 function createTask(params) {
   const existingTaskData = taskStorage.readTaskData();
   const latestTaskId = existingTaskData.latestTaskId;
@@ -45,6 +59,10 @@ function createTask(params) {
   };
 }
 
+/**
+ * Fetches all tasks or filtered tasks if status is provided.
+ * @param {string} status - The optional status to filter tasks.
+ */
 function getTasks(status) {
   const { list } = taskStorage.readTaskData();
   if (status) {
@@ -63,6 +81,11 @@ function getTasks(status) {
   return { status: 200, result: list };
 }
 
+/**
+ * Updates a task status using its ID.
+ * @param {string} id - The task ID.
+ * @param {string} status - The status value to be updated to task.
+ */
 function updateTask(id, status) {
   const taskId = Number(id);
   if (!taskId) {
@@ -95,6 +118,10 @@ function updateTask(id, status) {
   };
 }
 
+/**
+ * Deletes a task using its ID.
+ * @param {string} id - The ID of the task to be deleted.
+ */
 function deleteTask(id) {
   const taskId = Number(id);
   if (!taskId) {
