@@ -9,7 +9,7 @@ function createTask(params) {
   existingTaskData.list.push(task);
   existingTaskData.latestTaskId = newTaskId;
   taskStorage.writeTaskData(existingTaskData);
-  return task;
+  return { message: "Task created successfully", task };
 }
 
 function getTasks(status) {
