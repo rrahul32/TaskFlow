@@ -1,5 +1,12 @@
 const taskStorage = require("../storage");
-const { Task } = require("../utils");
+const { Task, taskStatus } = require("../utils");
+
+function validateTaskStatus(status) {
+  if (status === taskStatus.completed || status === taskStatus.pending) {
+    return null;
+  }
+  return "Invalid task status";
+}
 
 function createTask(params) {
   const existingTaskData = taskStorage.readTaskData();
@@ -15,9 +22,19 @@ function createTask(params) {
 function getTasks(status) {
   const { list } = taskStorage.readTaskData();
   if (status) {
-    return list.filter((task) => task.status === status);
+    const error = validateTaskStatus(status);
+    if (error) {
+      return {
+        status: 400,
+        result: { error },
+      };
+    }
+    return {
+      status: 200,
+      result: list.filter((task) => task.status === status),
+    };
   }
-  return list;
+  return { status: 200, result: list };
 }
 
 function updateTask(id, status) {

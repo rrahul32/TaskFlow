@@ -6,8 +6,8 @@ function createTask(req, res) {
 }
 
 function getAllTasks(_, res) {
-  const result = tasksService.getTasks();
-  res.status(200).json(result);
+  const { status, result } = tasksService.getTasks();
+  res.status(status).json(result);
 }
 
 function updateTask(req, res) {
@@ -24,9 +24,9 @@ function deleteTask(req, res) {
 }
 
 function getFilteredTasks(req, res) {
-  const { status } = req.params;
-  const result = tasksService.getTasks(status);
-  res.json(result);
+  const { status: taskStatus } = req.params;
+  const { status, result } = tasksService.getTasks(taskStatus);
+  res.status(status).json(result);
 }
 
 module.exports = {
