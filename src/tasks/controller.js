@@ -12,8 +12,9 @@ function getAllTasks(_, res) {
 
 function updateTask(req, res) {
   const { id } = req.params;
-  const result = tasksService.updateTask(id.req.body);
-  res.json(result);
+  const { status: taskStatus } = req.body;
+  const { status, ...result } = tasksService.updateTask(id, taskStatus);
+  res.status(status).json(result);
 }
 
 function deleteTask(req, res) {
