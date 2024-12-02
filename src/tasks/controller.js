@@ -1,8 +1,8 @@
 const tasksService = require("./service");
 
 function createTask(req, res) {
-  const result = tasksService.createTask(req.body);
-  res.status(201).json(result);
+  const { status, result } = tasksService.createTask(req.body);
+  res.status(status).json(result);
 }
 
 function getAllTasks(_, res) {

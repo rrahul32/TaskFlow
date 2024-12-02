@@ -8,15 +8,41 @@ function validateTaskStatus(status) {
   return "Invalid task status";
 }
 
+function validateTaskDetails(task) {
+  if (!task.title) {
+    return "Task title should not be empty";
+  }
+  if (typeof task.title !== "string") {
+    return "Task title should be a string";
+  }
+  if (!task.description) {
+    return "Task description should not be empty";
+  }
+  if (typeof task.description !== "string") {
+    return "Task description should be a string";
+  }
+  return validateTaskStatus(task.status);
+}
+
 function createTask(params) {
   const existingTaskData = taskStorage.readTaskData();
   const latestTaskId = existingTaskData.latestTaskId;
   const newTaskId = latestTaskId + 1;
   const task = new Task(newTaskId, params.title, params.description);
+  const error = validateTaskDetails(task);
+  if (error) {
+    return {
+      status: 400,
+      result: { error },
+    };
+  }
   existingTaskData.list.push(task);
   existingTaskData.latestTaskId = newTaskId;
   taskStorage.writeTaskData(existingTaskData);
-  return { message: "Task created successfully.", task };
+  return {
+    status: 201,
+    result: { message: "Task created successfully.", task },
+  };
 }
 
 function getTasks(status) {
@@ -43,6 +69,13 @@ function updateTask(id, status) {
     return {
       status: 400,
       error: "Invalid task ID.",
+    };
+  }
+  const error = validateTaskStatus(status);
+  if (error) {
+    return {
+      status: 400,
+      error,
     };
   }
   const taskData = taskStorage.readTaskData();
