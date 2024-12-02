@@ -1,7 +1,7 @@
 const taskStorage = require("../storage");
 const { Task } = require("../utils");
 
-async function createTask(params) {
+function createTask(params) {
   const existingTaskData = taskStorage.readTaskData();
   const latestTaskId = existingTaskData.latestTaskId;
   const newTaskId = latestTaskId + 1;
@@ -12,15 +12,19 @@ async function createTask(params) {
   return task;
 }
 
-async function getTasks(params) {
+function getTasks(status) {
+  const { list } = taskStorage.readTaskData();
+  if (status) {
+    return list.filter((task) => task.status === status);
+  }
+  return list;
+}
+
+function updateTask(params) {
   return params;
 }
 
-async function updateTask(params) {
-  return params;
-}
-
-async function deleteTask(params) {
+function deleteTask(params) {
   return params;
 }
 
